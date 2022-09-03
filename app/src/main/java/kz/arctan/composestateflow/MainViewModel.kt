@@ -1,20 +1,19 @@
 package kz.arctan.composestateflow
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.update
 
 class MainViewModel : ViewModel() {
-    private val _itemListViewState = MutableStateFlow(ItemListViewState())
-    val itemListViewState: StateFlow<ItemListViewState> = _itemListViewState
+    private val _itemListViewStateFlow = MutableStateFlow(ItemListViewState())
+    val itemListViewStateFlow: StateFlow<ItemListViewState> = _itemListViewStateFlow
 
     init {
-        val getItemsUseCase = GetItemsUserCase()
+        val getItemsUseCase = GetItemsUseCase()
         val items = getItemsUseCase()
-        viewModelScope.launch {
-            _itemListViewState.emit(items)
+        _itemListViewStateFlow.update {
+            it.copy(items = items)
         }
     }
 
@@ -22,7 +21,7 @@ class MainViewModel : ViewModel() {
         when (event) {
             is ItemListViewEvent.ItemCheckEvent -> {
                 val checkItemUseCase = CheckItemUseCase()
-                
+
             }
             is ItemListViewEvent.ItemDeleteEvent -> TODO()
         }

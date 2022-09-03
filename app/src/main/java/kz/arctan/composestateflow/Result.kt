@@ -5,6 +5,6 @@ sealed class Result<T>(
     _errorMessage: String? = null
 ) {
     data class Success<T>(val data: T) : Result<T>(data)
-    data class Loading<T>(val prevData: T) : Result<T>(prevData)
-    data class Error(val errorMessage: String) : Result<Any>(_errorMessage = errorMessage)
+    data class Loading<T>(val prevData: T? = null) : Result<T>(prevData)
+    data class Error<T>(val errorMessage: String) : Result<T>(_errorMessage = errorMessage)
 }
